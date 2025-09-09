@@ -1,0 +1,35 @@
+name: Build & Commit CV.pdf
+
+on:
+  push:
+    paths:
+      - '**.tex'
+      - '**.bib'
+      - '**.sty'
+      - .github/workflows/build-commit.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write   # serve per fare il commit automatico
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - uses: xu-cheng/latex-action@v3
+        with:
+          root_file: CV.tex
+          latexmk_use_xelatex: false
+          # texlive_packages: moderncv tcolorbox xcolor geometry hyperref etoolbox
+
+      - name: Commit CV.pdf back to repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add CV.pdf
+          git commit -m "Update CV.pdf [ci skip]" || echo "No changes to commit"
+          git push
