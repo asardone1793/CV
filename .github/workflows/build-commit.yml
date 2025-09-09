@@ -1,4 +1,4 @@
-name: Build & Commit CV.pdf
+name: Build & Commit main.pdf
 
 on:
   push:
@@ -10,21 +10,24 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write   # serve per fare il commit automatico
+  contents: write   # serve per il commit automatico
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Clona il repo
       - uses: actions/checkout@v4
         with:
           persist-credentials: true
 
-      # Compila il CV con LaTeX
+      # (Facoltativo) Vedi cosa c'è nella repo appena clonata
+      - name: List files before build
+        run: ls -la
+
+      # Compila LaTeX -> PDF
       - uses: xu-cheng/latex-action@v3
         with:
-          root_file: main.tex          # cambia se il file ha un altro nome
+          root_file: main.tex              # <--- qui il tuo file
           latexmk_use_xelatex: false
           texlive_packages: >-
             moderncv
@@ -34,13 +37,21 @@ jobs:
             hyperref
             etoolbox
             babel
+            ragged2e
+            enumitem
+            fontawesome5
+
+      # (Facoltativo) Conferma che main.pdf esista
+      - name: Verify PDF exists
+        run: |
+          test -f main.pdf && echo "PDF generated ✔" || (echo "PDF missing ✖" && exit 1)
 
       # Commit automatico del PDF generato
-      - name: Commit CV.pdf back to repo
+      - name: Commit main.pdf back to repo
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add CV.pdf
-          git commit -m "Update CV.pdf [skip ci]" || echo "No changes to commit"
+          git add main.pdf
+          git commit -m "Update main.pdf [skip ci]" || echo "No changes to commit"
           git push
 
