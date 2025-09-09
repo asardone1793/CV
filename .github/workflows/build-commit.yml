@@ -45,18 +45,14 @@ jobs:
       fontawesome5
       xurl
 
+      - name: Rename to CV.pdf
+  run: mv main.pdf CV.pdf
 
-      # (Facoltativo) Conferma che main.pdf esista
-      - name: Verify PDF exists
-        run: |
-          test -f main.pdf && echo "PDF generated ✔" || (echo "PDF missing ✖" && exit 1)
-
-      # Commit automatico del PDF generato
-      - name: Commit main.pdf back to repo
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add main.pdf
-          git commit -m "Update main.pdf [skip ci]" || echo "No changes to commit"
-          git push
+- name: Commit CV.pdf back to repo
+  run: |
+    git config user.name "github-actions[bot]"
+    git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+    git add CV.pdf
+    git commit -m "Update CV.pdf [skip ci]" || echo "No changes to commit"
+    git push
 
