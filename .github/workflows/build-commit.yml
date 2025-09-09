@@ -26,20 +26,25 @@ jobs:
 
       # Compila LaTeX -> PDF
       - uses: xu-cheng/latex-action@v3
-        with:
-          root_file: main.tex              # <--- qui il tuo file
-          latexmk_use_xelatex: false
-          texlive_packages: >-
-            moderncv
-            tcolorbox
-            xcolor
-            geometry
-            hyperref
-            etoolbox
-            babel
-            ragged2e
-            enumitem
-            fontawesome5
+  with:
+    root_file: main.tex
+    latexmk_use_xelatex: true   # <--- usa XeLaTeX (oppure latexmk_use_lualatex: true)
+    # latexmk_use_lualatex: true   # alternativa a XeLaTeX, lascia una sola di queste due
+    extra_system_packages: >-
+      fontconfig
+    texlive_packages: >-
+      moderncv
+      tcolorbox
+      xcolor
+      geometry
+      hyperref
+      etoolbox
+      babel
+      ragged2e
+      enumitem
+      fontawesome5
+      xurl
+
 
       # (Facoltativo) Conferma che main.pdf esista
       - name: Verify PDF exists
