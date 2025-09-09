@@ -16,20 +16,31 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # Clona il repo
       - uses: actions/checkout@v4
         with:
           persist-credentials: true
 
+      # Compila il CV con LaTeX
       - uses: xu-cheng/latex-action@v3
         with:
-          root_file: main.tex
+          root_file: main.tex          # cambia se il file ha un altro nome
           latexmk_use_xelatex: false
-          # texlive_packages: moderncv tcolorbox xcolor geometry hyperref etoolbox
+          texlive_packages: >-
+            moderncv
+            tcolorbox
+            xcolor
+            geometry
+            hyperref
+            etoolbox
+            babel
 
+      # Commit automatico del PDF generato
       - name: Commit CV.pdf back to repo
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add CV.pdf
-          git commit -m "Update CV.pdf [ci skip]" || echo "No changes to commit"
+          git commit -m "Update CV.pdf [skip ci]" || echo "No changes to commit"
           git push
+
