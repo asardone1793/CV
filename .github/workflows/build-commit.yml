@@ -22,7 +22,7 @@ jobs:
 
       - uses: xu-cheng/latex-action@v3
         with:
-          root_file: CV.tex
+          root_file: main.tex
           latexmk_use_xelatex: false
           # texlive_packages: moderncv tcolorbox xcolor geometry hyperref etoolbox
 
